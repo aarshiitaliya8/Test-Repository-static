@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "swiftdeploy-vc-test",
+  "builds": [
+    {
+      "src": "**/*",
+      "use": "@vercel/static"
+    }
+  ]
+}
