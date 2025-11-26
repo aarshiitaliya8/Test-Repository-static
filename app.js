@@ -7,7 +7,6 @@ let exp={
 }
 
 const incomeInput = document.getElementById('income-input');
-
 const addIncomeBtn = document.getElementById('add-income');
 const expenseNameInput = document.getElementById('expense-name');
 const expenseAmountInput = document.getElementById('expense-amount');
