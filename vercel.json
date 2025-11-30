@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "Test-Repository-static",
+  "name": "swiftdeploy-vc-test",
   "builds": [
     {
       "src": "**/*",
