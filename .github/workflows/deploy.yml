@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: Notify Success
+      if: success()
+      run: |
+        curl -X POST ${{ secrets.SWIFT_DEPLOY_WEBHOOK_URL }}/api/UnifiedDeployment/webhook/github -H "Content-Type: application/json" -H "ngrok-skip-browser-warning: true" -d '{"deploymentId": "6b02851975597e64b5979f3d", "status": "success"}'
+
+    - name: Notify Failure
+      if: failure()
+      run: |
+        curl -X POST ${{ secrets.SWIFT_DEPLOY_WEBHOOK_URL }}/api/UnifiedDeployment/webhook/github -H "Content-Type: application/json" -H "ngrok-skip-browser-warning: true" -d '{"deploymentId": "6b02851975597e64b5979f3d", "status": "failed"}'
